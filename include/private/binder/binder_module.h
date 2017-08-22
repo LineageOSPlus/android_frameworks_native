@@ -24,7 +24,11 @@ namespace android {
 /* obtain structures and constants from the kernel header */
 
 #include <sys/ioctl.h>
+#ifdef BUILD_WITH_LINARO
+#include <linux/android/binder.h>
+#else
 #include <linux/binder.h>
+#endif
 
 #ifdef __cplusplus
 }   // namespace android

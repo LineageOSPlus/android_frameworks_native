@@ -19,6 +19,8 @@
 
 #include <string>
 #include <vector>
+#include <memory>
+#include <limits>
 
 #include <cutils/native_handle.h>
 #include <nativehelper/ScopedFd.h>
@@ -27,7 +29,11 @@
 #include <utils/String16.h>
 #include <utils/Vector.h>
 #include <utils/Flattenable.h>
+#ifdef BUILD_WITH_LINARO
+#include <linux/android/binder.h>
+#else
 #include <linux/binder.h>
+#endif
 
 #include <binder/IInterface.h>
 #include <binder/Parcelable.h>
