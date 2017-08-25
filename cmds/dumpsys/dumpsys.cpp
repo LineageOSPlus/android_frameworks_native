@@ -17,7 +17,7 @@
 #include <binder/ProcessState.h>
 #include <binder/TextOutput.h>
 #include <utils/Log.h>
-#include <utils/Vector.h>
+//#include <utils/Vector.h>
 
 #include <fcntl.h>
 #include <getopt.h>
@@ -29,6 +29,7 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <signal.h>
 
 using namespace android;
 using android::base::StringPrintf;
@@ -53,6 +54,7 @@ static void usage() {
             "         SERVICE [ARGS]: dumps only service SERVICE, optionally passing ARGS to it\n");
 }
 
+#if 0
 bool IsSkipped(const Vector<String16>& skipped, const String16& service) {
     for (const auto& candidate : skipped) {
         if (candidate == service) {
@@ -61,21 +63,30 @@ bool IsSkipped(const Vector<String16>& skipped, const String16& service) {
     }
     return false;
 }
+#endif
 
 int main(int argc, char* const argv[])
 {
+    ALOGE("dumpsys 1");
     signal(SIGPIPE, SIG_IGN);
+    ALOGE("dumpsys 2");
     sp<IServiceManager> sm = defaultServiceManager();
+    ALOGE("dumpsys 3");
     fflush(stdout);
     if (sm == NULL) {
         ALOGE("Unable to get default service manager!");
         aerr << "dumpsys: Unable to get default service manager!" << endl;
         return 20;
     }
+    ALOGE("dumpsys 4");
 
+#if 0
     Vector<String16> services;
+    ALOGE("dumpsys 5");
     Vector<String16> args;
+    ALOGE("dumpsys 6");
     Vector<String16> skippedServices;
+    ALOGE("dumpsys 7");
     bool showListOnly = false;
     bool skipServices = false;
     int timeoutArg = 10;
@@ -227,7 +238,7 @@ int main(int argc, char* const argv[])
                 auto time_left_ms = [end]() {
                     auto now = std::chrono::steady_clock::now();
                     auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - now);
-                    return std::max(diff.count(), 0ll);
+                    return std::max((long long) diff.count(), 0ll);
                 };
 
                 int rc = TEMP_FAILURE_RETRY(poll(&pfd, 1, time_left_ms()));
@@ -281,6 +292,6 @@ int main(int argc, char* const argv[])
             aerr << "Can't find service: " << service_name << endl;
         }
     }
-
+#endif
     return 0;
 }
