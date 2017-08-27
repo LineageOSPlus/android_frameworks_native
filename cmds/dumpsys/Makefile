@@ -39,5 +39,13 @@ $(TARGET): $(OBJECTS)
 clean:
 	rm -rf $(OBJECTS) $(TARGET)
 
-.PHONY: clean all
+install-deps: $(LIB_DEPS)
+	$(foreach lib, $^, make -C $(dir $(lib)) install;)
+
+install:
+	install -m 0755 -D $(TARGET) $(DESTDIR)/usr/bin/$(TARGET)
+
+install-all: install-deps install
+
+.PHONY: clean install all
 

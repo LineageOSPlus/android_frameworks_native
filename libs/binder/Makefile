@@ -6,10 +6,7 @@ CPPFLAGS+= \
     -I$(ANDROID_TOP_DIR)/frameworks/native/include \
     -I$(ANDROID_TOP_DIR)/system/core/include \
     -I$(ANDROID_TOP_DIR)/libnativehelper/include
-LDFLAGS+= \
-    -L$(ANDROID_TOP_DIR)/system/core/libcutils \
-    -lcutils \
-    -shared
+LDFLAGS+= -shared
 
 SOURCES = \
     AppOpsManager.cpp \
