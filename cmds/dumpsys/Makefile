@@ -42,6 +42,11 @@ $(TARGET): $(OBJECTS) $(LIB_DEPS)
 clean:
 	rm -rf $(OBJECTS) $(TARGET)
 
+clean-deps:
+	$(foreach lib, $(LIB_DEPS), make -C $(dir $(lib)) clean;)
+
+clean-all: clean clean-deps
+
 install-deps: $(LIB_DEPS)
 	$(foreach lib, $^, make -C $(dir $(lib)) install;)
 
