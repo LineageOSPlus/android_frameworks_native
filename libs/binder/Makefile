@@ -2,7 +2,6 @@ ANDROID_TOP_DIR=$(shell realpath ../../../..)
 
 CPPFLAGS+= \
     -fPIC \
-    -DBUILD_WITH_LINARO \
     -I$(ANDROID_TOP_DIR)/frameworks/native/include \
     -I$(ANDROID_TOP_DIR)/system/core/include \
     -I$(ANDROID_TOP_DIR)/libnativehelper/include
