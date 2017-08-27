@@ -1,5 +1,14 @@
 ANDROID_TOP_DIR=$(shell realpath ../../../..)
 
+LIB_DEPS = \
+    $(ANDROID_TOP_DIR)/frameworks/native/libs/binder/libbinder.so \
+    $(ANDROID_TOP_DIR)/system/core/liblog/liblog.so \
+    $(ANDROID_TOP_DIR)/system/core/libutils/libutils.so \
+    $(ANDROID_TOP_DIR)/system/core/libcutils/libcutils.so \
+    $(ANDROID_TOP_DIR)/system/core/base/libbase.so
+LIB_DEPS_LDFLAGS = $(addprefix -L,$(dir $(LIB_DEPS))) \
+                   $(addprefix -l,$(patsubst lib%.so, %, $(notdir $(LIB_DEPS))))
+
 CPPFLAGS+= \
     -fPIC \
     -pthread \
@@ -10,16 +19,7 @@ CPPFLAGS+= \
     -I$(ANDROID_TOP_DIR)/libnativehelper/include
 LDFLAGS= \
     -pthread \
-    -L$(ANDROID_TOP_DIR)/frameworks/native/libs/binder \
-    -L$(ANDROID_TOP_DIR)/system/core/liblog \
-    -L$(ANDROID_TOP_DIR)/system/core/libutils \
-    -L$(ANDROID_TOP_DIR)/system/core/libcutils \
-    -L$(ANDROID_TOP_DIR)/system/core/base \
-    -lbinder \
-    -llog \
-    -lutils \
-    -lcutils \
-    -lbase
+    $(LIB_DEPS_LDFLAGS)
 
 SOURCES = \
     dumpsys.cpp
@@ -30,8 +30,11 @@ TARGET=dumpsys
 
 all: $(TARGET)
 
-$(TARGET): $(OBJECTS)
+$(TARGET): $(OBJECTS) $(LIB_DEPS)
 	$(CXX) $(CPPFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
+
+%.so:
+	make -C $(dir $@)
 
 %.o: %.cpp
 	$(CXX) -c $(CPPFLAGS) -o $@ $<
