@@ -65,25 +65,18 @@ bool IsSkipped(const Vector<String16>& skipped, const String16& service) {
 
 int main(int argc, char* const argv[])
 {
-    ALOGE("dumpsys 1");
     signal(SIGPIPE, SIG_IGN);
-    ALOGE("dumpsys 2");
     sp<IServiceManager> sm = defaultServiceManager();
-    ALOGE("dumpsys 3");
     fflush(stdout);
     if (sm == NULL) {
         ALOGE("Unable to get default service manager!");
         aerr << "dumpsys: Unable to get default service manager!" << endl;
         return 20;
     }
-    ALOGE("dumpsys 4");
 
     Vector<String16> services;
-    ALOGE("dumpsys 5");
     Vector<String16> args;
-    ALOGE("dumpsys 6");
     Vector<String16> skippedServices;
-    ALOGE("dumpsys 7");
     bool showListOnly = false;
     bool skipServices = false;
     int timeoutArg = 10;
@@ -97,14 +90,12 @@ int main(int argc, char* const argv[])
         int c;
         int optionIndex = 0;
 
-    	ALOGE("dumpsys 8");
         c = getopt_long(argc, argv, "+t:l", longOptions, &optionIndex);
 
         if (c == -1) {
             break;
         }
 
-    	ALOGE("dumpsys 9");
         switch (c) {
         case 0:
             if (!strcmp(longOptions[optionIndex].name, "skip")) {
@@ -137,7 +128,6 @@ int main(int argc, char* const argv[])
         }
     }
 
-    ALOGE("dumpsys 10");
     for (int i = optind; i < argc; i++) {
         if (skipServices) {
             skippedServices.add(String16(argv[i]));
@@ -150,7 +140,6 @@ int main(int argc, char* const argv[])
         }
     }
 
-    ALOGE("dumpsys 11");
     if ((skipServices && skippedServices.empty()) ||
             (showListOnly && (!services.empty() || !skippedServices.empty()))) {
         usage();
@@ -164,22 +153,16 @@ int main(int argc, char* const argv[])
         args.add(String16("-a"));
     }
 
-    ALOGE("dumpsys 12");
     const size_t N = services.size();
-    ALOGE("dumpsys N = %d\n", N);
     if (N > 1) {
         // first print a list of the current services
         aout << "Currently running services:" << endl;
-        fprintf(stdout, "Currently running services:\n");
-        ALOGE("Currently running services:\n");
 
         for (size_t i=0; i<N; i++) {
             sp<IBinder> service = sm->checkService(services[i]);
             if (service != NULL) {
                 bool skipped = IsSkipped(skippedServices, services[i]);
                 aout << "  " << services[i] << (skipped ? " (skipped)" : "") << endl;
-        	fprintf(stdout, "%s %s", services[i], skipped ? " (skipped)" : "");
-        	ALOGE("%s %s", services[i], skipped ? " (skipped)" : "");
             }
         }
     }
