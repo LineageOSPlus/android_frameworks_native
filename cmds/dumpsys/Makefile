@@ -49,8 +49,8 @@ clean-all: clean clean-deps
 install-deps: $(LIB_DEPS)
 	$(foreach lib, $^, make -C $(dir $(lib)) install;)
 
-install:
-	install -m 0755 -D $(TARGET) $(DESTDIR)/usr/bin/$(TARGET)
+install: $(TARGET)
+	install -m 0755 -D $^ $(DESTDIR)/usr/bin/$^
 
 install-all: install-deps install
 

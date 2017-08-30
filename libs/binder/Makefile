@@ -51,7 +51,7 @@ $(TARGET): $(OBJECTS)
 clean:
 	rm -rf $(OBJECTS) $(TARGET)
 
-install:
-	install -m 0644 $(TARGET) $(DESTDIR)/usr/lib/$(TARGET)
+install: $(TARGET)
+	install -m 0644 $^ $(DESTDIR)/usr/lib/$^
 
 .PHONY: clean install all
